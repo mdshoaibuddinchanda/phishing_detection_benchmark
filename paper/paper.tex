@@ -1,0 +1,102 @@
+% IEEE Conference Paper Template
+% Replace with actual IEEE template from conference
+
+\documentclass[conference]{IEEEtran}
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\begin{document}
+
+\title{Accuracy–Energy Trade-offs of Small Language Models for Real-Time Phishing Detection}
+
+\author{
+\IEEEauthorblockN{Your Name}
+\IEEEauthorblockA{\textit{Department} \\
+\textit{University}\\
+City, Country \\
+email@university.edu}
+}
+
+\maketitle
+
+\begin{abstract}
+Phishing detection using deep learning models has achieved high accuracy but at significant computational cost. We empirically evaluate the accuracy–energy trade-offs of Small Language Models (SLMs) compared to large transformer models for phishing email classification. Our benchmark compares RoBERTa-Large, DistilBERT, and Phi-3-mini across performance metrics (accuracy, precision, recall, F1-score) and efficiency metrics (energy consumption, CO₂ emissions, inference latency, model size). Results demonstrate that SLMs achieve near-equivalent performance (F1-score within 2–3\%) while reducing energy consumption by up to XX\% and inference latency by XX\%. These findings support the feasibility of deploying energy-efficient phishing detection systems without sacrificing accuracy, advancing sustainable AI practices in cybersecurity.
+\end{abstract}
+
+\begin{IEEEkeywords}
+phishing detection, small language models, energy efficiency, green AI, transformer models, cybersecurity
+\end{IEEEkeywords}
+
+\section{Introduction}
+% Background on phishing
+% Deep learning effectiveness
+% Energy efficiency gap
+% Research contribution
+
+\section{Related Work}
+\subsection{Phishing Detection with NLP}
+\subsection{Transformer-Based Classifiers}
+\subsection{Green AI and Energy-Efficient ML}
+
+\section{Methodology}
+\subsection{Dataset}
+\subsection{Model Selection}
+\subsection{Training Configuration}
+\subsection{Energy Measurement}
+\subsection{Evaluation Metrics}
+
+\section{Experimental Results}
+
+\subsection{Performance Metrics}
+% Table 1: Complete metrics comparison
+\begin{table}[htbp]
+\caption{Performance and Efficiency Metrics}
+\begin{center}
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Model} & \textbf{Acc} & \textbf{F1} & \textbf{Size} & \textbf{Latency} & \textbf{Energy} & \textbf{CO₂} \\
+ & & & (MB) & (ms) & (kWh) & (g) \\
+\midrule
+RoBERTa & XX & XX & XX & XX & XX & XX \\
+DistilBERT & XX & XX & XX & XX & XX & XX \\
+Phi-3-mini & XX & XX & XX & XX & XX & XX \\
+\bottomrule
+\end{tabular}
+\label{tab:results}
+\end{center}
+\end{table}
+
+\subsection{Accuracy-Energy Trade-offs}
+% Figure 1: Pareto frontier
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\columnwidth]{figures/pareto_frontier.png}}
+\caption{Accuracy–Energy Pareto Frontier}
+\label{fig:pareto}
+\end{figure}
+
+\section{Discussion}
+\subsection{Performance Comparison}
+\subsection{Energy Efficiency Analysis}
+\subsection{Practical Implications}
+
+\section{Limitations}
+% Single task focus
+% Dataset scope
+% Hardware specificity
+
+\section{Conclusion}
+% Restate findings
+% Sustainability argument
+% Future directions
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

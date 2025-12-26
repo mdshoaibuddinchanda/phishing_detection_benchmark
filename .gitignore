@@ -1,0 +1,78 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Model checkpoints (large files)
+models/*/checkpoint-*/
+models/*/runs/
+*.bin
+*.safetensors
+
+# Data files (add raw data to git if small enough)
+data/raw/*.csv
+data/raw/*.json
+data/raw/*.parquet
+
+# Logs and temporary files
+*.log
+logs/
+results/logs/*.csv
+.codecarbon/
+emissions.csv
+
+# OS
+.DS_Store
+Thumbs.db
+
+# PyTorch
+*.pth
+*.pt
+
+# HuggingFace cache
+.cache/
+transformers_cache/
+
+# Paper build artifacts
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.synctex.gz
+paper/*.fdb_latexmk
+paper/*.fls

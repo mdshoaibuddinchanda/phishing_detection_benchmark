@@ -1,0 +1,90 @@
+# Configuration for Phishing Detection Benchmarking
+# This is the single source of truth for all experimental parameters
+
+# Random seed for reproducibility
+random_seed: 42
+
+# Dataset paths
+data:
+  raw_path: "data/raw/phishing_emails.csv"
+  processed_dir: "data/processed"
+  train_file: "data/processed/train.csv"
+  val_file: "data/processed/val.csv"
+  test_file: "data/processed/test.csv"
+  
+  # Data split ratios
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+  
+  # Text column and label column names
+  text_column: "text"
+  label_column: "label"
+
+# Model configurations
+models:
+  # Already trained - commented out to skip
+  # bert_large:
+  #   name: "roberta-large"
+  #   output_dir: "models/bert_large"
+  #   max_length: 256
+  
+  # Already trained - commented out to skip  
+  # distilbert:
+  #   name: "distilbert-base-uncased"
+  #   output_dir: "models/distilbert"
+  #   max_length: 256
+    
+  phi3_mini:
+    name: "microsoft/Phi-3-mini-4k-instruct"
+    output_dir: "models/phi3_mini"
+    max_length: 256
+    # Model-specific training overrides for large model on 4GB GPU
+    training:
+      batch_size: 4              # Reduced from 32
+      gradient_accumulation_steps: 16  # Increased from 2 to maintain effective batch size
+      fp16: false                # Disable FP16 to reduce memory fragmentation
+      gradient_checkpointing: true  # Enable gradient checkpointing
+
+# Training hyperparameters (same for all models for fair comparison)
+training:
+  epochs: 3
+  batch_size: 32
+  gradient_accumulation_steps: 2
+  learning_rate: 0.00002
+  weight_decay: 0.01
+  warmup_steps: 500
+  logging_steps: 500
+  save_strategy: "epoch"  # options: "epoch" or "steps"
+  save_steps: 500          # used only if save_strategy == "steps"
+  eval_strategy: "epoch"
+  save_total_limit: 3
+  fp16: true
+  dataloader_num_workers: 4
+  dataloader_pin_memory: true
+
+# Inference configuration
+inference:
+  batch_size: 64
+  device: "cuda"  # or "cpu" if no GPU available
+
+# Energy tracking configuration
+energy:
+  project_name: "phishing_detection_benchmark"
+  country_iso_code: "USA"
+  tracking_mode: "process"
+  log_dir: "results/logs"
+
+# Results and output paths
+results:
+  tables_dir: "results/tables"
+  figures_dir: "results/figures"
+  logs_dir: "results/logs"
+  summary_file: "results/tables/results_summary.csv"
+
+# Visualization settings
+visualization:
+  figure_format: "png"
+  dpi: 300
+  figsize: [10, 6]
+  style: "seaborn-v0_8-darkgrid"
