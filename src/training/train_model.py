@@ -11,6 +11,7 @@ from transformers import (
     Trainer,
     DataCollatorWithPadding
 )
+from transformers.trainer_utils import get_last_checkpoint
 from datasets import Dataset
 import pandas as pd
 
@@ -20,7 +21,7 @@ def prepare_dataset(
     tokenizer: AutoTokenizer,
     text_col: str = 'text',
     label_col: str = 'label',
-    max_length: int = 512
+    max_length: int = 256
 ) -> Dataset:
     """
     Tokenize and prepare dataset for training.
@@ -86,13 +87,8 @@ def train_model(
         num_labels=2
     )
     
-    # Enable gradient checkpointing if specified (saves memory)
-    if training_config.get('gradient_checkpointing', False):
-        model.gradient_checkpointing_enable()
-        print("Gradient checkpointing enabled for memory efficiency")
-    
     # Prepare datasets
-    max_length = config.get('max_length', 512)
+    max_length = config.get('max_length', 256)
     train_dataset = prepare_dataset(train_df, tokenizer, max_length=max_length)
     val_dataset = prepare_dataset(val_df, tokenizer, max_length=max_length)
     
@@ -118,6 +114,7 @@ def train_model(
         # Performance optimizations
         fp16=training_config.get('fp16', False),
         bf16=training_config.get('bf16', False),
+
         dataloader_num_workers=training_config.get('dataloader_num_workers', 0),
         dataloader_pin_memory=training_config.get('dataloader_pin_memory', True),
         remove_unused_columns=True,
@@ -140,7 +137,15 @@ def train_model(
     
     # Train
     print("\nStarting training...")
-    trainer.train()
+    # Attempt to resume from the latest checkpoint if present
+    checkpoint_path = None
+    out_path = Path(output_dir)
+    if out_path.exists():
+        last_ckpt = get_last_checkpoint(str(out_path))
+        if last_ckpt is not None:
+            checkpoint_path = last_ckpt
+            print(f"Found checkpoint: {last_ckpt}. Resuming training.")
+    trainer.train(resume_from_checkpoint=checkpoint_path)
     
     # Save final model
     print(f"\nSaving model to {output_dir}")

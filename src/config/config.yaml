@@ -1,7 +1,9 @@
 # Configuration for Phishing Detection Benchmarking
 # This is the single source of truth for all experimental parameters
 
-# Random seed for reproducibility
+# Random seed for controlled reproducibility
+# Note: Full bitwise reproducibility is not guaranteed due to CUDA non-determinism.
+# This seed controls data splits and model initialization only.
 random_seed: 42
 
 # Dataset paths
@@ -23,28 +25,23 @@ data:
 
 # Model configurations
 models:
-  # Already trained - commented out to skip
-  # bert_large:
-  #   name: "roberta-large"
-  #   output_dir: "models/bert_large"
-  #   max_length: 256
-  
-  # Already trained - commented out to skip  
-  # distilbert:
-  #   name: "distilbert-base-uncased"
-  #   output_dir: "models/distilbert"
-  #   max_length: 256
-    
-  phi3_mini:
-    name: "microsoft/Phi-3-mini-4k-instruct"
-    output_dir: "models/phi3_mini"
+  roberta_large:
+    provider: "huggingface"
+    name: "roberta-large"
+    output_dir: "models/roberta_large"
     max_length: 256
-    # Model-specific training overrides for large model on 4GB GPU
-    training:
-      batch_size: 4              # Reduced from 32
-      gradient_accumulation_steps: 16  # Increased from 2 to maintain effective batch size
-      fp16: false                # Disable FP16 to reduce memory fragmentation
-      gradient_checkpointing: true  # Enable gradient checkpointing
+    
+  distilbert:
+    provider: "huggingface"
+    name: "distilbert-base-uncased"
+    output_dir: "models/distilbert"
+    max_length: 256
+    
+  roberta_base:
+    provider: "huggingface"
+    name: "roberta-base"
+    output_dir: "models/roberta_base"
+    max_length: 256
 
 # Training hyperparameters (same for all models for fair comparison)
 training:

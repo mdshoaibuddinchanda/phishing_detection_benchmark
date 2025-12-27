@@ -26,7 +26,7 @@ def get_model_config(config: Dict[str, Any], model_name: str) -> Dict[str, Any]:
     
     Args:
         config: Full configuration dictionary
-        model_name: Name of model (bert_large, distilbert, phi3_mini)
+        model_name: Name of model (bert_large, distilbert, roberta_base)
         
     Returns:
         Model-specific configuration

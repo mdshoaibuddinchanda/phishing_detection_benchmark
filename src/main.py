@@ -81,7 +81,13 @@ def train_all_models(config, train_df, val_df):
     models_config = config['models']
     
     for model_key, model_config in models_config.items():
-        print(f"\n{'='*60}")
+        # Auto-skip HF models that already have trained artifacts
+        out_dir = Path(model_config['output_dir'])
+        trained_artifacts = [out_dir / 'model.safetensors', out_dir / 'training_args.bin']
+        if all(p.exists() for p in trained_artifacts):
+            print(f"\n[Skip] {model_key} already trained (artifacts present); skipping training")
+            continue
+
         print(f"Training: {model_key}")
         print(f"{'='*60}")
         
@@ -120,9 +126,12 @@ def benchmark_all_models(config, test_df):
     all_results = []
     
     for model_key, model_config in models_config.items():
+        # Benchmark HF models only
+        model_dir = model_config['output_dir']
+        
         # Benchmark model
         results = benchmark_model(
-            model_dir=model_config['output_dir'],
+            model_dir=model_dir,
             test_df=test_df,
             model_key=model_key,
             config=config

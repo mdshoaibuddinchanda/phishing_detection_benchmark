@@ -107,13 +107,17 @@ def compute_metrics_summary(
     # Performance metrics
     perf_metrics = compute_all_metrics(true_labels, predictions)
     
-    # Combine with efficiency metrics
+    # Combine with efficiency metrics (include confusion counts for printing)
     full_metrics = {
         'model': model_name,
         'accuracy': perf_metrics['accuracy'],
         'precision': perf_metrics['precision'],
         'recall': perf_metrics['recall'],
         'f1_score': perf_metrics['f1_score'],
+        'true_positives': perf_metrics.get('true_positives'),
+        'true_negatives': perf_metrics.get('true_negatives'),
+        'false_positives': perf_metrics.get('false_positives'),
+        'false_negatives': perf_metrics.get('false_negatives'),
         'model_size_mb': model_size_mb,
         'latency_ms_per_sample': latency_ms,
         'energy_kwh': energy_kwh,

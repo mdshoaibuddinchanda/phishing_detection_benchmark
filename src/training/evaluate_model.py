@@ -14,7 +14,7 @@ def evaluate_model(
     test_df: pd.DataFrame,
     text_col: str = 'text',
     label_col: str = 'label',
-    max_length: int = 512,
+    max_length: int = 256,
     batch_size: int = 32,
     device: str = 'cuda' if torch.cuda.is_available() else 'cpu'
 ) -> Tuple[np.ndarray, np.ndarray]:

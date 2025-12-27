@@ -25,7 +25,7 @@ def benchmark_model(
     Args:
         model_dir: Directory containing saved model
         test_df: Test DataFrame
-        model_key: Model identifier (bert_large, distilbert, phi3_mini)
+        model_key: Model identifier (bert_large, distilbert)
         config: Full configuration dictionary
         text_col: Name of text column
         label_col: Name of label column
@@ -43,7 +43,7 @@ def benchmark_model(
     model_config = config['models'][model_key]
     
     batch_size = inference_config.get('batch_size', 32)
-    max_length = model_config.get('max_length', 512)
+    max_length = model_config.get('max_length', 256)
     device = inference_config.get('device', 'cuda' if torch.cuda.is_available() else 'cpu')
     
     # Initialize energy tracker
