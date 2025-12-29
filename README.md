@@ -172,11 +172,11 @@ This pipeline ensures reproducibility through:
 
 ## 📈 Typical Results
 
-| Model         | Accuracy | F1-Score | Energy (kWh) | CO₂ (g)  | Latency (ms) | Size (MB) |
-|---------------|----------|----------|--------------|----------|--------------|-----------|
-| RoBERTa-Large | 0.973    | 0.965    | 0.0041       | 4.10     | 56.5         | 13,576    |
-| RoBERTa-Base  | 0.973    | 0.966    | 0.0012       | 1.26     | 16.3         | 4,774     |
-| DistilBERT    | 0.970    | 0.962    | 0.0006       | 0.61     | 8.4          | 2,558     |
+| Model         | Accuracy | F1-Score | Energy (kWh) | CO₂ (g) | Latency (ms) | Size (MB) |
+|---------------|----------|----------|--------------|---------|--------------|-----------|
+| RoBERTa-Large | 0.973    | 0.965    | 0.0064       | 6.42    | 89.2         | 13,576    |
+| RoBERTa-Base  | 0.973    | 0.966    | 0.0012       | 1.15    | 14.4         | 4,774     |
+| DistilBERT    | 0.970    | 0.962    | 0.0006       | 0.58    | 7.2          | 2,558     |
 
 *Results from benchmarking on held-out test set (2,796 samples).*
 
@@ -187,7 +187,7 @@ If you use this code, please cite:
 ```bibtex
 @article{chanda2025phishing,
   title={Accuracy–Energy Trade-offs of Transformer Models for Phishing Email Detection},
-  author={Chanda, MD Shoaib Uddin},
+  author={ MD Shoaib Uddin Chanda},
   journal={IEEE/ACM Transactions on Machine Learning and Systems},
   year={2025}
 }
