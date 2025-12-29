@@ -1,14 +1,13 @@
 # Copilot Instructions for eco_phish
 
-- **Project goal**: Benchmark phishing email classifiers on accuracy vs energy/latency. HF models are trained locally; Phi-3 is inference-only via Ollama.
+- **Project goal**: Benchmark phishing email classifiers on accuracy vs energy/latency. All models are Hugging Face transformers trained locally.
 - **Single source of truth**: Adjust experiments only in [src/config/config.yaml](src/config/config.yaml) (paths, splits, models, training, inference, energy, viz).
 - **Data**: Raw CSV expected at [data/raw/phishing_emails.csv](data/raw/phishing_emails.csv) with `text` and `label` columns. Processed splits live in `data/processed/`. Use `--skip-data` to reuse splits.
-- **Training scope**: Train only Hugging Face models (e.g., `bert_large`, `distilbert`). Any model with `provider: ollama` or `trainable: false` must be skipped.
-- **Training runner**: [src/main.py](src/main.py) `train_all_models` dispatches to [src/training/train_model.py](src/training/train_model.py) using HF `Trainer`. Checkpoints are saved but not auto-resumed; each run starts fresh unless you add resume logic.
+- **Training scope**: Train only Hugging Face models (e.g., `roberta_large`, `roberta_base`, `distilbert`).
+- **Training runner**: [src/main.py](src/main.py) `train_all_models` dispatches to [src/training/train_model.py](src/training/train_model.py) using HF `Trainer`. Checkpoints are saved and training auto-resumes from the latest checkpoint unless disabled with `--no-resume`.
 - **Key training settings**: Max length 256; default batch 32 with grad accumulation 2; fp16 enabled globally but can be overridden per-model. Gradient checkpointing optional via per-model `training.gradient_checkpointing`.
-- **Avoid OOM**: Phi-3 is large; do not train it. Reduce batch or use CPU if memory tight. GPU cache is cleared between models.
+- **Avoid OOM**: Reduce batch size or use CPU if memory is tight. GPU cache is cleared between models.
 - **Inference (HF models)**: [src/inference/benchmark_inference.py](src/inference/benchmark_inference.py) loads saved checkpoints, runs batched `torch.no_grad()` forward passes, tracks latency/energy, and writes metrics arrays for downstream plots.
-- **Inference (Ollama Phi-3)**: Treat as LLM endpoint. Use `config.models.phi3_mini.ollama_model` and `inference.ollama_host`. No gradients/optimizer/CUDA. Send prompt from config; expect single-digit class output.
 - **Energy tracking**: CodeCarbon via [src/energy/energy_tracker.py](../src/energy/energy_tracker.py) wraps training/inference; logs to `results/logs` with project name prefix.
 - **Metrics & results**: `compute_metrics_summary` aggregates accuracy/precision/recall/F1 plus size, latency, energy, CO2. Results saved to `results/tables/results_summary.csv`. Figures rendered under `results/figures/` via visualization module.
 - **CLI workflows**:
@@ -18,5 +17,5 @@
   - Only visualize existing results: `uv run python src/main.py --only-visualize`
 - **Dependencies**: Install with `uv pip install -r requirements.txt`. Uses torch/transformers/datasets, pandas/numpy, codecarbon, matplotlib/seaborn.
 - **Windows notes**: HF cache may warn about symlinks; safe to ignore or enable Developer Mode. Large model downloads can be slow; Xet warning is informational.
-- **Do not**: Train Phi-3 via HF; bypass the config-driven flow; hardcode paths or hyperparameters; change data schema without updating config.
-- **If adding resume**: pass `resume_from_checkpoint` to HF `Trainer.train()`; ensure checkpoint directory exists in the model output dir.
+- **Do not**: Bypass the config-driven flow; hardcode paths or hyperparameters; change data schema without updating config.
+- **Resume behavior**: Training auto-resumes from the latest checkpoint in the model output dir. Disable with `--no-resume`.

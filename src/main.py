@@ -69,8 +69,16 @@ def prepare_data(config):
     return train_df, val_df, test_df
 
 
-def train_all_models(config, train_df, val_df):
-    """Train all models."""
+def train_all_models(config, train_df, val_df, force_train: bool = False, allow_resume: bool = True):
+    """Train all models.
+
+    Args:
+        config: Full configuration dict
+        train_df: Training split dataframe
+        val_df: Validation split dataframe
+        force_train: If True, do not auto-skip even if artifacts exist
+        allow_resume: If True, resume training from latest checkpoint in output_dir
+    """
     import gc
     import torch
     
@@ -81,10 +89,10 @@ def train_all_models(config, train_df, val_df):
     models_config = config['models']
     
     for model_key, model_config in models_config.items():
-        # Auto-skip HF models that already have trained artifacts
+        # Auto-skip HF models that already have trained artifacts unless forced
         out_dir = Path(model_config['output_dir'])
         trained_artifacts = [out_dir / 'model.safetensors', out_dir / 'training_args.bin']
-        if all(p.exists() for p in trained_artifacts):
+        if (not force_train) and all(p.exists() for p in trained_artifacts):
             print(f"\n[Skip] {model_key} already trained (artifacts present); skipping training")
             continue
 
@@ -102,7 +110,8 @@ def train_all_models(config, train_df, val_df):
             val_df=val_df,
             output_dir=model_config['output_dir'],
             config={**model_config, 'training': training_config},
-            random_seed=config['random_seed']
+            random_seed=config['random_seed'],
+            allow_resume=allow_resume
         )
         
         # Clear GPU memory between models to prevent OOM
@@ -276,6 +285,16 @@ def main():
         action='store_true',
         help='Only generate visualizations from existing results'
     )
+    parser.add_argument(
+        '--force-train',
+        action='store_true',
+        help='Force training even if trained artifacts exist'
+    )
+    parser.add_argument(
+        '--no-resume',
+        action='store_true',
+        help='Disable resume-from-checkpoint during training'
+    )
     
     args = parser.parse_args()
     
@@ -306,7 +325,13 @@ def main():
     
     # Step 2: Model training
     if not args.skip_training:
-        train_all_models(config, train_df, val_df)
+        train_all_models(
+            config,
+            train_df,
+            val_df,
+            force_train=args.force_train,
+            allow_resume=(not args.no_resume)
+        )
     else:
         print("\nSkipping model training, using existing models...")
     

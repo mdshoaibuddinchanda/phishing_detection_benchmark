@@ -57,7 +57,8 @@ def train_model(
     val_df: pd.DataFrame,
     output_dir: str,
     config: Dict[str, Any],
-    random_seed: int = 42
+    random_seed: int = 42,
+    allow_resume: bool = True
 ) -> None:
     """
     Fine-tune transformer model for phishing detection.
@@ -69,6 +70,7 @@ def train_model(
         output_dir: Directory to save model checkpoints
         config: Training configuration
         random_seed: Random seed for reproducibility
+        allow_resume: If True, resume from latest checkpoint in output_dir
     """
     # Set random seeds
     torch.manual_seed(random_seed)
@@ -140,11 +142,14 @@ def train_model(
     # Attempt to resume from the latest checkpoint if present
     checkpoint_path = None
     out_path = Path(output_dir)
-    if out_path.exists():
-        last_ckpt = get_last_checkpoint(str(out_path))
-        if last_ckpt is not None:
-            checkpoint_path = last_ckpt
-            print(f"Found checkpoint: {last_ckpt}. Resuming training.")
+    if allow_resume:
+        if out_path.exists():
+            last_ckpt = get_last_checkpoint(str(out_path))
+            if last_ckpt is not None:
+                checkpoint_path = last_ckpt
+                print(f"Found checkpoint: {last_ckpt}. Resuming training.")
+    else:
+        print("Resume disabled: starting training without resuming.")
     trainer.train(resume_from_checkpoint=checkpoint_path)
     
     # Save final model

@@ -1,14 +1,14 @@
 # Phishing Detection Benchmarking: Accuracy–Energy Trade-offs
 
-**Research project for benchmarking Small Language Models on phishing detection with energy consumption analysis.**
+**Research project for benchmarking transformer models on phishing email detection with energy consumption and latency analysis.**
 
 ## 📋 Overview
 
 This repository contains a reproducible pipeline for evaluating the accuracy–energy trade-offs of transformer-based language models for phishing email detection. The project compares:
 
 - **RoBERTa-Large** (heavyweight baseline)
+- **RoBERTa-Base** (balanced baseline)
 - **DistilBERT** (lightweight transformer)
-- **Phi-3-mini** (small language model)
 
 ### Key Metrics
 
@@ -28,15 +28,15 @@ This repository contains a reproducible pipeline for evaluating the accuracy–e
 
 ## 🏗️ Project Structure
 
-```flie
+```text
 eco_phish/
 ├── data/
 │   ├── raw/                    # Original dataset
 │   └── processed/              # Train/val/test splits
 ├── models/                     # Saved model checkpoints
-│   ├── bert_large/
-│   ├── distilbert/
-│   └── phi3_mini/
+│   ├── roberta_large/
+│   ├── roberta_base/
+│   └── distilbert/
 ├── src/
 │   ├── config/                 # Configuration management
 │   ├── data/                   # Data loading and preprocessing
@@ -112,6 +112,18 @@ uv run python src/main.py --skip-training
 uv run python src/main.py --only-visualize
 ```
 
+**Force retraining (even if trained artifacts exist):**
+
+```bash
+uv run python src/main.py --skip-data --force-train
+```
+
+**Retrain without resuming from checkpoints (fresh start):**
+
+```bash
+uv run python src/main.py --skip-data --force-train --no-resume
+```
+
 ## 📊 Expected Outputs
 
 ### Tables
@@ -153,30 +165,30 @@ This pipeline ensures reproducibility through:
 
 ### Hardware Used
 
-- GPU: [Specify your GPU, e.g., NVIDIA RTX 4090]
-- CPU: [Specify your CPU]
-- RAM: [Specify RAM]
-- OS: Windows/Linux
+- GPU: [NVIDIA RTX 3050]
+- CPU: [intel i5-11300H]
+- RAM: [32 GB]
+- OS: Windows 11
 
 ## 📈 Typical Results
 
 | Model         | Accuracy | F1-Score | Energy (kWh) | CO₂ (g)  | Latency (ms) | Size (MB) |
 |---------------|----------|----------|--------------|----------|--------------|-----------|
-| RoBERTa-Large | ~0.95    | ~0.94    | Higher       | Higher   | Higher       | ~1200     |
-| DistilBERT    | ~0.93    | ~0.92    | Medium       | Medium   | Medium       | ~260      |
-| Phi-3-mini    | ~0.92    | ~0.91    | **Lower**    | **Lower**| **Lower**    | ~2500     |
+| RoBERTa-Large | 0.973    | 0.965    | 0.0041       | 4.10     | 56.5         | 13,576    |
+| RoBERTa-Base  | 0.973    | 0.966    | 0.0012       | 1.26     | 16.3         | 4,774     |
+| DistilBERT    | 0.970    | 0.962    | 0.0006       | 0.61     | 8.4          | 2,558     |
 
-*Values are illustrative. Actual results depend on dataset and hardware.*
+*Results from benchmarking on held-out test set (2,796 samples).*
 
 ## 📝 Citation
 
 If you use this code, please cite:
 
 ```bibtex
-@article{yourname2025phishing,
-  title={Accuracy–Energy Trade-offs of Small Language Models for Real-Time Phishing Detection},
-  author={Your Name},
-  journal={IEEE Conference on AI},
+@article{chanda2025phishing,
+  title={Accuracy–Energy Trade-offs of Transformer Models for Phishing Email Detection},
+  author={Chanda, MD Shoaib Uddin},
+  journal={IEEE/ACM Transactions on Machine Learning and Systems},
   year={2025}
 }
 ```
@@ -204,24 +216,3 @@ If you use this code, please cite:
 ## 📄 License
 
 MIT License
-
-## 🤝 Contributing
-
-This is a research project. For questions or suggestions, please open an issue.
-
-## ✅ Checklist for Submission
-
-- [ ] Dataset placed in `data/raw/`
-- [ ] Configuration verified in `config.yaml`
-- [ ] All models trained successfully
-- [ ] Benchmarking completed with energy logs
-- [ ] Figures generated in `results/figures/`
-- [ ] Results table saved in `results/tables/`
-- [ ] Hardware details documented in README
-- [ ] Paper draft references correct figure files
-- [ ] Code tested and reproduces results
-
----
-
-**Last updated:** December 2025  
-**Contact:** [Your email]

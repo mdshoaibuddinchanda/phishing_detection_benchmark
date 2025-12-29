@@ -25,7 +25,7 @@ def benchmark_model(
     Args:
         model_dir: Directory containing saved model
         test_df: Test DataFrame
-        model_key: Model identifier (bert_large, distilbert)
+        model_key: Model identifier (roberta_large, distilbert, roberta_base)
         config: Full configuration dictionary
         text_col: Name of text column
         label_col: Name of label column
