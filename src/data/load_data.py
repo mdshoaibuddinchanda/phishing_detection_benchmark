@@ -5,12 +5,14 @@ from pathlib import Path
 from typing import Tuple
 
 
-def load_raw_data(data_path: str) -> pd.DataFrame:
+def load_raw_data(data_path: str, text_col: str = 'text', label_col: str = 'label') -> pd.DataFrame:
     """
     Load raw phishing email dataset.
     
     Args:
         data_path: Path to raw CSV file
+        text_col: Name of the text column in CSV
+        label_col: Name of the label column in CSV
         
     Returns:
         DataFrame with text and labels
@@ -18,14 +20,14 @@ def load_raw_data(data_path: str) -> pd.DataFrame:
     df = pd.read_csv(data_path)
     
     # Validate required columns
-    required_columns = ['text', 'label']
+    required_columns = [text_col, label_col]
     for col in required_columns:
         if col not in df.columns:
             raise ValueError(f"Missing required column: {col}")
     
     # Basic sanity checks
     print(f"Loaded {len(df)} samples")
-    print(f"Class distribution:\n{df['label'].value_counts()}")
+    print(f"Class distribution:\n{df[label_col].value_counts()}")
     print(f"Missing values:\n{df.isnull().sum()}")
     
     return df

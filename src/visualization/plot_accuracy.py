@@ -4,6 +4,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
 from typing import Optional
+from .style import apply_publication_style
+
+# Apply publication-quality styling once
+apply_publication_style()
 
 
 def plot_accuracy_comparison(
@@ -21,8 +25,6 @@ def plot_accuracy_comparison(
         figsize: Figure size
         dpi: Resolution
     """
-    plt.style.use('seaborn-v0_8-darkgrid')
-    
     fig, ax = plt.subplots(figsize=figsize)
     
     models = results_df['model'].tolist()
@@ -35,13 +37,12 @@ def plot_accuracy_comparison(
     ax.bar([i - width/2 for i in x], accuracy, width, label='Accuracy', alpha=0.8)
     ax.bar([i + width/2 for i in x], f1, width, label='F1-Score', alpha=0.8)
     
-    ax.set_xlabel('Model', fontsize=12, fontweight='bold')
-    ax.set_ylabel('Score', fontsize=12, fontweight='bold')
-    ax.set_title('Performance Comparison: Accuracy vs F1-Score', fontsize=14, fontweight='bold')
+    ax.set_xlabel('Model')
+    ax.set_ylabel('Score')
+    ax.set_title('Performance Comparison: Accuracy vs F1-Score')
     ax.set_xticks(x)
-    ax.set_xticklabels(models, rotation=0)
-    ax.legend(fontsize=10)
-    ax.grid(axis='y', alpha=0.3)
+    ax.set_xticklabels(models, rotation=45, ha='right')
+    ax.legend()
     ax.set_ylim([0, 1.0])
     
     plt.tight_layout()
@@ -66,8 +67,6 @@ def plot_all_metrics(
         figsize: Figure size
         dpi: Resolution
     """
-    plt.style.use('seaborn-v0_8-darkgrid')
-    
     fig, ax = plt.subplots(figsize=figsize)
     
     models = results_df['model'].tolist()
@@ -81,13 +80,12 @@ def plot_all_metrics(
         offset = (i - len(metrics)/2 + 0.5) * width
         ax.bar([xi + offset for xi in x], values, width, label=metric.replace('_', ' ').title(), alpha=0.8)
     
-    ax.set_xlabel('Model', fontsize=12, fontweight='bold')
-    ax.set_ylabel('Score', fontsize=12, fontweight='bold')
-    ax.set_title('Complete Performance Metrics Comparison', fontsize=14, fontweight='bold')
+    ax.set_xlabel('Model')
+    ax.set_ylabel('Score')
+    ax.set_title('Complete Performance Metrics Comparison')
     ax.set_xticks(x)
-    ax.set_xticklabels(models, rotation=0)
-    ax.legend(fontsize=9, loc='lower right')
-    ax.grid(axis='y', alpha=0.3)
+    ax.set_xticklabels(models, rotation=45, ha='right')
+    ax.legend(loc='lower right')
     ax.set_ylim([0, 1.0])
     
     plt.tight_layout()

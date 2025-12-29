@@ -4,6 +4,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
+from .style import apply_publication_style
+
+# Apply publication-quality styling once
+apply_publication_style()
 
 
 def plot_pareto_frontier(
@@ -25,8 +29,6 @@ def plot_pareto_frontier(
         figsize: Figure size
         dpi: Resolution
     """
-    plt.style.use('seaborn-v0_8-darkgrid')
-    
     fig, ax = plt.subplots(figsize=figsize)
     
     models = results_df['model'].tolist()
@@ -34,20 +36,19 @@ def plot_pareto_frontier(
     y_values = results_df[y_metric].tolist()
     
     # Plot points
-    colors = ['#e74c3c', '#3498db', '#2ecc71']
+    colors = ['#000000', '#555555', '#888888']
     for i, (model, x, y) in enumerate(zip(models, x_values, y_values)):
-        color = colors[i] if i < len(colors) else '#95a5a6'
-        ax.scatter(x, y, s=200, alpha=0.7, color=color, edgecolors='black', linewidth=1.5, label=model)
+        color = colors[i] if i < len(colors) else '#bbbbbb'
+        ax.scatter(x, y, s=100, alpha=0.7, color=color, edgecolors='black', linewidth=1.5, label=model)
         
         # Add model name annotation
         ax.annotate(
             model,
             (x, y),
-            xytext=(10, 10),
+            xytext=(8, 8),
             textcoords='offset points',
-            fontsize=10,
-            fontweight='bold',
-            bbox=dict(boxstyle='round,pad=0.3', facecolor=color, alpha=0.3)
+            fontsize=9,
+            bbox=dict(boxstyle='round,pad=0.3', facecolor='white', alpha=0.7, edgecolor='black', linewidth=0.5)
         )
     
     # Labels and title
@@ -65,12 +66,12 @@ def plot_pareto_frontier(
         'recall': 'Recall'
     }
     
-    ax.set_xlabel(x_label_map.get(x_metric, x_metric), fontsize=12, fontweight='bold')
-    ax.set_ylabel(y_label_map.get(y_metric, y_metric), fontsize=12, fontweight='bold')
-    ax.set_title('Accuracy–Energy Trade-off (Pareto Frontier)', fontsize=14, fontweight='bold')
+    ax.set_xlabel(x_label_map.get(x_metric, x_metric))
+    ax.set_ylabel(y_label_map.get(y_metric, y_metric))
+    ax.set_title('Accuracy–Energy Trade-off (Pareto Frontier)')
     
-    # Grid
-    ax.grid(True, alpha=0.3, linestyle='--')
+    # Minimal grid
+    ax.grid(True, alpha=0.2, linestyle='-', linewidth=0.5)
     
     # Set y-axis limits for performance metrics
     if y_metric in ['accuracy', 'f1_score', 'precision', 'recall']:
@@ -100,40 +101,38 @@ def plot_multi_objective_comparison(
         figsize: Figure size
         dpi: Resolution
     """
-    plt.style.use('seaborn-v0_8-darkgrid')
-    
     fig, axes = plt.subplots(1, 2, figsize=figsize)
     
     models = results_df['model'].tolist()
-    colors = ['#e74c3c', '#3498db', '#2ecc71']
+    colors = ['#000000', '#555555', '#888888']
     
     # Plot 1: F1-Score vs Energy
     ax1 = axes[0]
     for i, model in enumerate(models):
         row = results_df[results_df['model'] == model].iloc[0]
-        color = colors[i] if i < len(colors) else '#95a5a6'
-        ax1.scatter(row['energy_kwh'], row['f1_score'], s=200, alpha=0.7, 
+        color = colors[i] if i < len(colors) else '#bbbbbb'
+        ax1.scatter(row['energy_kwh'], row['f1_score'], s=100, alpha=0.7, 
                    color=color, edgecolors='black', linewidth=1.5, label=model)
     
-    ax1.set_xlabel('Energy Consumption (kWh)', fontsize=11, fontweight='bold')
-    ax1.set_ylabel('F1-Score', fontsize=11, fontweight='bold')
-    ax1.set_title('Performance vs Energy', fontsize=12, fontweight='bold')
-    ax1.legend(fontsize=9)
-    ax1.grid(True, alpha=0.3, linestyle='--')
+    ax1.set_xlabel('Energy Consumption (kWh)')
+    ax1.set_ylabel('F1-Score')
+    ax1.set_title('Performance vs Energy')
+    ax1.legend()
+    ax1.grid(True, alpha=0.2, linestyle='-', linewidth=0.5)
     
     # Plot 2: F1-Score vs Latency
     ax2 = axes[1]
     for i, model in enumerate(models):
         row = results_df[results_df['model'] == model].iloc[0]
-        color = colors[i] if i < len(colors) else '#95a5a6'
-        ax2.scatter(row['latency_ms_per_sample'], row['f1_score'], s=200, alpha=0.7,
+        color = colors[i] if i < len(colors) else '#bbbbbb'
+        ax2.scatter(row['latency_ms_per_sample'], row['f1_score'], s=100, alpha=0.7,
                    color=color, edgecolors='black', linewidth=1.5, label=model)
     
-    ax2.set_xlabel('Latency (ms per sample)', fontsize=11, fontweight='bold')
-    ax2.set_ylabel('F1-Score', fontsize=11, fontweight='bold')
-    ax2.set_title('Performance vs Latency', fontsize=12, fontweight='bold')
-    ax2.legend(fontsize=9)
-    ax2.grid(True, alpha=0.3, linestyle='--')
+    ax2.set_xlabel('Latency (ms per sample)')
+    ax2.set_ylabel('F1-Score')
+    ax2.set_title('Performance vs Latency')
+    ax2.legend()
+    ax2.grid(True, alpha=0.2, linestyle='-', linewidth=0.5)
     
     plt.tight_layout()
     plt.savefig(output_path, dpi=dpi, bbox_inches='tight')

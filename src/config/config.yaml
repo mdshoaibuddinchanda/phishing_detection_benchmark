@@ -1,49 +1,112 @@
-# Configuration for Phishing Detection Benchmarking
-# This is the single source of truth for all experimental parameters
+# ============================================================
+# Phishing Detection Benchmarking Configuration
+# Single Source of Truth for All Experiments
+# ============================================================
 
 # Random seed for controlled reproducibility
-# Note: Full bitwise reproducibility is not guaranteed due to CUDA non-determinism.
-# This seed controls data splits and model initialization only.
+# Note: CUDA operations may introduce minor nondeterminism
 random_seed: 42
 
-# Dataset paths
+
+# ============================================================
+# DATA CONFIGURATION
+# ============================================================
 data:
-  raw_path: "data/raw/phishing_emails.csv"
+  # INPUT FILE (RAW DATASET)
+  raw_path: "data/raw/phishing_email_1.csv"
+
+  # Auto-generated processed data
   processed_dir: "data/processed"
   train_file: "data/processed/train.csv"
   val_file: "data/processed/val.csv"
   test_file: "data/processed/test.csv"
-  
-  # Data split ratios
+
+  # Stratified split ratios
   train_ratio: 0.7
   val_ratio: 0.15
   test_ratio: 0.15
-  
-  # Text column and label column names
-  text_column: "text"
+
+  # Column names in CSV
+  text_column: "text_combined"
   label_column: "label"
 
-# Model configurations
+
+# ============================================================
+# MODEL CONFIGURATIONS
+# Execution order = order listed here
+# ============================================================
 models:
-  roberta_large:
-    provider: "huggingface"
-    name: "roberta-large"
-    output_dir: "models/roberta_large"
-    max_length: 256
-    
+
+  # ---------------- LIGHTWEIGHT (RUN FIRST) ----------------
   distilbert:
     provider: "huggingface"
     name: "distilbert-base-uncased"
     output_dir: "models/distilbert"
     max_length: 256
-    
+
+  mobilebert:
+    provider: "huggingface"
+    name: "google/mobilebert-uncased"
+    output_dir: "models/mobilebert"
+    max_length: 256
+
+  albert_base:
+    provider: "huggingface"
+    name: "albert-base-v2"
+    output_dir: "models/albert_base"
+    max_length: 256
+
+
+  # ---------------- MEDIUM / BALANCED ----------------
+  bert_base:
+    provider: "huggingface"
+    name: "bert-base-uncased"
+    output_dir: "models/bert_base"
+    max_length: 256
+
   roberta_base:
     provider: "huggingface"
     name: "roberta-base"
     output_dir: "models/roberta_base"
     max_length: 256
 
-# Training hyperparameters (same for all models for fair comparison)
+  electra_base:
+    provider: "huggingface"
+    name: "google/electra-base-discriminator"
+    output_dir: "models/electra_base"
+    max_length: 256
+
+  deberta_v3_base:
+    provider: "huggingface"
+    name: "microsoft/deberta-v3-base"
+    output_dir: "models/deberta_v3_base"
+    max_length: 256
+
+  albert_large:
+    provider: "huggingface"
+    name: "albert-large-v2"
+    output_dir: "models/albert_large"
+    max_length: 256
+
+
+  # ---------------- HEAVY (RUN LAST) ----------------
+  bert_large:
+    provider: "huggingface"
+    name: "bert-large-uncased"
+    output_dir: "models/bert_large"
+    max_length: 256
+
+  roberta_large:
+    provider: "huggingface"
+    name: "roberta-large"
+    output_dir: "models/roberta_large"
+    max_length: 256
+
+
+# ============================================================
+# TRAINING CONFIGURATION
+# Same hyperparameters for all models (fair comparison)
+# ============================================================
 training:
   epochs: 3
   batch_size: 32
@@ -51,37 +114,52 @@ training:
   learning_rate: 0.00002
   weight_decay: 0.01
   warmup_steps: 500
+
   logging_steps: 500
-  save_strategy: "epoch"  # options: "epoch" or "steps"
-  save_steps: 500         # used only if save_strategy == "steps"
-  eval_strategy: "epoch"
+
+  evaluation_strategy: "epoch"
+  save_strategy: "epoch"
   save_total_limit: 3
+
   fp16: true
+
   dataloader_num_workers: 4
   dataloader_pin_memory: true
 
-# Inference configuration
+
+# ============================================================
+# INFERENCE CONFIGURATION
+# ============================================================
 inference:
   batch_size: 64
-  device: "cuda"  # or "cpu" if no GPU available
+  device: "cuda"   # change to "cpu" only if no GPU
 
-# Energy tracking configuration
+
+# ============================================================
+# ENERGY & EMISSIONS TRACKING
+# ============================================================
 energy:
-  project_name: "phishing_detection_benchmark"
-  country_iso_code: "USA"
+  project_name: "energy_aware_phishing_detection"
+  country_iso_code: "USA"   # fixed baseline for fair comparison
   tracking_mode: "process"
   log_dir: "results/logs"
 
-# Results and output paths
+
+# ============================================================
+# RESULTS OUTPUT
+# ============================================================
 results:
   tables_dir: "results/tables"
   figures_dir: "results/figures"
   logs_dir: "results/logs"
   summary_file: "results/tables/results_summary.csv"
 
-# Visualization settings
+
+# ============================================================
+# VISUALIZATION SETTINGS (PUBLICATION-QUALITY)
+# ============================================================
 visualization:
-  figure_format: "png"
+  figure_format: "pdf"       # vector graphics for journals
   dpi: 300
-  figsize: [10, 6]
-  style: "seaborn-v0_8-whitegrid"
+  figsize: [7, 5]            # journal-column compatible
+  style: "classic"           # matplotlib default (no seaborn)

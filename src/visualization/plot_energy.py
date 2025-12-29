@@ -4,6 +4,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
 from typing import Optional
+from .style import apply_publication_style
+
+# Apply publication-quality styling once
+apply_publication_style()
 
 
 def plot_energy_comparison(
@@ -21,19 +25,17 @@ def plot_energy_comparison(
         figsize: Figure size
         dpi: Resolution
     """
-    plt.style.use('seaborn-v0_8-darkgrid')
-    
     fig, ax = plt.subplots(figsize=figsize)
     
     models = results_df['model'].tolist()
     energy = results_df['energy_kwh'].tolist()
     
-    bars = ax.bar(models, energy, alpha=0.8, color='#e74c3c')
+    bars = ax.bar(models, energy, alpha=0.8, color='#555555')
     
-    ax.set_xlabel('Model', fontsize=12, fontweight='bold')
-    ax.set_ylabel('Energy Consumption (kWh)', fontsize=12, fontweight='bold')
-    ax.set_title('Energy Consumption Comparison', fontsize=14, fontweight='bold')
-    ax.grid(axis='y', alpha=0.3)
+    ax.set_xlabel('Model')
+    ax.set_ylabel('Energy Consumption (kWh)')
+    ax.set_title('Energy Consumption Comparison')
+    plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha='right')
     
     # Add value labels on bars
     for bar in bars:
@@ -64,19 +66,17 @@ def plot_co2_comparison(
         figsize: Figure size
         dpi: Resolution
     """
-    plt.style.use('seaborn-v0_8-darkgrid')
-    
     fig, ax = plt.subplots(figsize=figsize)
     
     models = results_df['model'].tolist()
     co2 = results_df['co2_grams'].tolist()
     
-    bars = ax.bar(models, co2, alpha=0.8, color='#27ae60')
+    bars = ax.bar(models, co2, alpha=0.8, color='#555555')
     
-    ax.set_xlabel('Model', fontsize=12, fontweight='bold')
-    ax.set_ylabel('CO₂ Emissions (grams)', fontsize=12, fontweight='bold')
-    ax.set_title('CO₂ Emissions Comparison', fontsize=14, fontweight='bold')
-    ax.grid(axis='y', alpha=0.3)
+    ax.set_xlabel('Model')
+    ax.set_ylabel('CO₂ Emissions (grams)')
+    ax.set_title('CO₂ Emissions Comparison')
+    plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha='right')
     
     # Add value labels on bars
     for bar in bars:
@@ -107,19 +107,17 @@ def plot_latency_comparison(
         figsize: Figure size
         dpi: Resolution
     """
-    plt.style.use('seaborn-v0_8-darkgrid')
-    
     fig, ax = plt.subplots(figsize=figsize)
     
     models = results_df['model'].tolist()
     latency = results_df['latency_ms_per_sample'].tolist()
     
-    bars = ax.bar(models, latency, alpha=0.8, color='#3498db')
+    bars = ax.bar(models, latency, alpha=0.8, color='#555555')
     
-    ax.set_xlabel('Model', fontsize=12, fontweight='bold')
-    ax.set_ylabel('Latency (ms per sample)', fontsize=12, fontweight='bold')
-    ax.set_title('Inference Latency Comparison', fontsize=14, fontweight='bold')
-    ax.grid(axis='y', alpha=0.3)
+    ax.set_xlabel('Model')
+    ax.set_ylabel('Latency (ms per sample)')
+    ax.set_title('Inference Latency Comparison')
+    plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha='right')
     
     # Add value labels on bars
     for bar in bars:
@@ -150,19 +148,17 @@ def plot_model_size_comparison(
         figsize: Figure size
         dpi: Resolution
     """
-    plt.style.use('seaborn-v0_8-darkgrid')
-    
     fig, ax = plt.subplots(figsize=figsize)
     
     models = results_df['model'].tolist()
     sizes = results_df['model_size_mb'].tolist()
     
-    bars = ax.bar(models, sizes, alpha=0.8, color='#9b59b6')
+    bars = ax.bar(models, sizes, alpha=0.8, color='#555555')
     
-    ax.set_xlabel('Model', fontsize=12, fontweight='bold')
-    ax.set_ylabel('Model Size (MB)', fontsize=12, fontweight='bold')
-    ax.set_title('Model Size Comparison', fontsize=14, fontweight='bold')
-    ax.grid(axis='y', alpha=0.3)
+    ax.set_xlabel('Model')
+    ax.set_ylabel('Model Size (MB)')
+    ax.set_title('Model Size Comparison')
+    plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha='right')
     
     # Add value labels on bars
     for bar in bars:

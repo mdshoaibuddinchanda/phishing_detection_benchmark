@@ -45,7 +45,11 @@ def prepare_data(config):
     
     # Load raw data
     print("\nLoading raw data...")
-    df = load_raw_data(data_config['raw_path'])
+    df = load_raw_data(
+        data_config['raw_path'],
+        text_col=data_config['text_column'],
+        label_col=data_config['label_column']
+    )
     
     # Preprocess
     print("\nPreprocessing text...")
@@ -87,6 +91,7 @@ def train_all_models(config, train_df, val_df, force_train: bool = False, allow_
     print("="*60)
     
     models_config = config['models']
+    data_config = config['data']
     
     for model_key, model_config in models_config.items():
         # Auto-skip HF models that already have trained artifacts unless forced
@@ -111,7 +116,9 @@ def train_all_models(config, train_df, val_df, force_train: bool = False, allow_
             output_dir=model_config['output_dir'],
             config={**model_config, 'training': training_config},
             random_seed=config['random_seed'],
-            allow_resume=allow_resume
+            allow_resume=allow_resume,
+            text_col=data_config['text_column'],
+            label_col=data_config['label_column']
         )
         
         # Clear GPU memory between models to prevent OOM
@@ -132,6 +139,7 @@ def benchmark_all_models(config, test_df):
     print("="*60)
     
     models_config = config['models']
+    data_config = config['data']
     all_results = []
     
     for model_key, model_config in models_config.items():
@@ -143,7 +151,9 @@ def benchmark_all_models(config, test_df):
             model_dir=model_dir,
             test_df=test_df,
             model_key=model_key,
-            config=config
+            config=config,
+            text_col=data_config.get('text_column', 'text'),
+            label_col=data_config.get('label_column', 'label')
         )
         
         # Compute comprehensive metrics
@@ -338,7 +348,14 @@ def main():
     # Step 3: Benchmarking
     results_df = benchmark_all_models(config, test_df)
     
-    # Step 4: Visualization
+    # Step 4: Generate publication-quality benchmark tables
+    from src.visualization.generate_benchmark_table import main as generate_tables
+    print("\n" + "="*60)
+    print("STEP 4: GENERATING BENCHMARK TABLES")
+    print("="*60)
+    generate_tables()
+    
+    # Step 5: Visualization
     generate_visualizations(config, results_df)
     
     print("\n" + "="*60)

@@ -58,7 +58,9 @@ def train_model(
     output_dir: str,
     config: Dict[str, Any],
     random_seed: int = 42,
-    allow_resume: bool = True
+    allow_resume: bool = True,
+    text_col: str = 'text',
+    label_col: str = 'label'
 ) -> None:
     """
     Fine-tune transformer model for phishing detection.
@@ -71,6 +73,8 @@ def train_model(
         config: Training configuration
         random_seed: Random seed for reproducibility
         allow_resume: If True, resume from latest checkpoint in output_dir
+        text_col: Name of text column
+        label_col: Name of label column
     """
     # Set random seeds
     torch.manual_seed(random_seed)
@@ -86,13 +90,14 @@ def train_model(
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForSequenceClassification.from_pretrained(
         model_name,
-        num_labels=2
+        num_labels=2,
+        use_safetensors=True  # Force safetensors to avoid torch.load vulnerability
     )
     
     # Prepare datasets
     max_length = config.get('max_length', 256)
-    train_dataset = prepare_dataset(train_df, tokenizer, max_length=max_length)
-    val_dataset = prepare_dataset(val_df, tokenizer, max_length=max_length)
+    train_dataset = prepare_dataset(train_df, tokenizer, text_col=text_col, label_col=label_col, max_length=max_length)
+    val_dataset = prepare_dataset(val_df, tokenizer, text_col=text_col, label_col=label_col, max_length=max_length)
     
     # Training arguments with performance optimizations
     training_args = TrainingArguments(

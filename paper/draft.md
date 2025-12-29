@@ -64,7 +64,9 @@ Reproducibility and transparency themes also appear in documentation standards (
 
 ## Dataset and Preprocessing (400–500 words)
 
-Dataset: A labeled phishing email corpus stored at `data/raw/phishing_emails.csv` with columns `text` and `label` (0 = legitimate, 1 = phishing). After preprocessing, a representative distribution shows ~11.3k legitimate and ~7.3k phishing samples, reflecting a realistic but moderately imbalanced scenario.
+Dataset: A labeled phishing email corpus stored at `data/raw/phishing_emails.csv` with configurable column names (default: `text_combined` for email content, `label` for binary class). This flexible configuration allows the pipeline to adapt to different dataset formats without code modifications. After preprocessing, a representative distribution shows ~11.3k legitimate and ~7.3k phishing samples, reflecting a realistic but moderately imbalanced scenario.
+
+Configuration-driven data handling: Column names, dataset paths, and split ratios are centralized in `src/config/config.yaml`, ensuring consistent parameter passing through data loading, preprocessing, training, and evaluation stages. This approach eliminates hardcoded assumptions and supports seamless adaptation to different datasets or labeling conventions. Parameters flow through pipeline functions as configuration dictionaries, reducing coupling and improving auditability.
 
 Splitting: Deterministic, stratified split with seed 42 into train (70%), validation (15%), and test (15%). Splits are saved to `data/processed/train.csv`, `val.csv`, and `test.csv` to ensure repeatability and to allow skipping data prep in future runs.
 
@@ -94,7 +96,7 @@ Unified hyperparameters (config-driven):
 
 - Epochs: 3
 - Batch size: 32 with gradient accumulation steps = 2 (effective batch 64)
-- Learning rate: 2e-5; weight decay: 0.01; warmup steps: 500
+- Learning rate: 0.00002 (2×10⁻⁵); weight decay: 0.01; warmup steps: 500
 - Max sequence length: 256 tokens
 - Mixed precision: fp16 enabled
 - Evaluation: per epoch; checkpointing: per epoch, keep 3; resume from latest checkpoint by default
@@ -123,7 +125,9 @@ Inference protocol: Evaluation uses batched inference with `torch.no_grad()` and
 
 Energy tracking: CodeCarbon’s process-level tracker runs in offline mode with country code set via configuration (default USA). Logs are written to `results/logs` with model-specific prefixes. We record runtime, energy (kWh), and derived CO₂ (grams). Because CodeCarbon estimates rely on hardware TDP and regional intensity baselines, we treat numbers as relative comparisons rather than exact measurements. The same tracker settings are used for all models to maintain fairness.
 
-Software stack: Experiments use PyTorch with Hugging Face Transformers and Datasets. All dependencies are pinned via `requirements.txt` and installed with uv for reproducibility. The config file controls model identifiers, tokenizer names, training arguments, and output directories. Visualization scripts consume the results table to render accuracy, latency, energy/CO₂, model size, and Pareto plots.
+Software stack: Experiments use PyTorch with Hugging Face Transformers and Datasets. All dependencies are pinned via `requirements.txt` and installed with uv for reproducibility. The config file controls model identifiers, tokenizer names, training arguments, output directories, and visualization settings. Visualization scripts consume the results table to render accuracy, latency, energy/CO₂, model size, and Pareto plots in publication-quality formats.
+
+Visualization pipeline: All figures are generated in vector PDF format (scalable for print and digital media) using matplotlib's classic style with explicit serif typography. This ensures figures meet journal standards: grayscale-compatible color schemes, visible line widths and marker sizes, minimal decorative grid lines, and professional typography matching research publication norms. Figure dimensions (7×5 inches) are chosen to fit standard journal column widths. All plots include explicit axis labels, legends, and titles; no auto-generated appearance is left to matplotlib defaults. This publication-quality output reduces post-processing overhead and ensures consistency across all benchmarking artifacts.
 
 Reproducibility checklist:
 
@@ -157,7 +161,7 @@ Error analysis (qualitative): False negatives often involve benign-looking trans
 
 Sensitivity analyses: We compared runs with and without resume-from-checkpoint; metrics remained stable, indicating that resumption does not bias results. Enabling gradient checkpointing reduced memory use at the expense of longer training time but did not materially change accuracy. Increasing max sequence length beyond 256 tokens yielded diminishing returns while raising latency and energy, reinforcing the chosen default.
 
-Visualization outputs: Accuracy and F1 bar charts show tight variance across runs; latency and energy plots reveal clearer separations. The Pareto frontier figure highlights the small but meaningful gap between RoBERTa-base and DistilBERT, helping teams decide whether the extra accuracy justifies the added cost. Model size plots aid packaging decisions, especially for edge or serverless deployments where image size matters.
+Visualization outputs: All figures are rendered in vector PDF format with publication-quality styling, including explicit serif typography, grayscale-safe color schemes, visible line widths, and minimal decorative elements. Accuracy and F1 bar charts show tight variance across runs; latency and energy plots reveal clearer separations. The Pareto frontier figure highlights the small but meaningful gap between RoBERTa-base and DistilBERT, helping teams decide whether the extra accuracy justifies the added cost. Model size plots aid packaging decisions, especially for edge or serverless deployments where image size matters. Benchmark tables are generated in three formats (CSV, Markdown, and LaTeX) for easy sharing, documentation, and paper submission.
 
 ## Discussion (500–700 words)
 
