@@ -109,7 +109,7 @@ models:
 # ============================================================
 training:
   epochs: 3
-  batch_size: 32
+  batch_size: 64
   gradient_accumulation_steps: 2
   learning_rate: 0.00002
   weight_decay: 0.01
