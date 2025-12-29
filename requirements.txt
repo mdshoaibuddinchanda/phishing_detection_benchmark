@@ -5,7 +5,7 @@
 
 # ---- Core ML / DL ----
 torch==2.1.0
-transformers==4.36.2
+transformers==4.41.2
 datasets==2.16.1
 
 # PEFT (explicitly pinned to avoid EncoderDecoderCache errors)
