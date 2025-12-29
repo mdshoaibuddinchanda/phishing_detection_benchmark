@@ -1,20 +1,28 @@
-# Core ML/DL
+# ===============================
+# Phishing Detection Benchmark
+# Stable + Kaggle-Compatible
+# ===============================
+
+# ---- Core ML / DL ----
 torch==2.1.0
 transformers==4.36.2
 datasets==2.16.1
 
-# Data processing
+# PEFT (explicitly pinned to avoid EncoderDecoderCache errors)
+peft==0.7.1
+
+# ---- Data processing ----
 pandas==2.1.4
 numpy==1.26.3
 scikit-learn==1.3.2
 
-# Energy tracking
+# ---- Energy tracking ----
 codecarbon==2.3.4
 
-# Visualization
+# ---- Visualization ----
 matplotlib==3.8.2
 seaborn==0.13.1
 
-# Utilities
+# ---- Utilities ----
 pyyaml==6.0.1
 tqdm==4.66.1
