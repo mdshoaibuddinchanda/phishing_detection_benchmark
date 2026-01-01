@@ -172,13 +172,19 @@ This pipeline ensures reproducibility through:
 
 ## 📈 Typical Results
 
-| Model         | Accuracy | F1-Score | Energy (kWh) | CO₂ (g) | Latency (ms) | Size (MB) |
-|---------------|----------|----------|--------------|---------|--------------|-----------|
-| RoBERTa-Large | 0.973    | 0.965    | 0.0064       | 6.42    | 89.2         | 13,576    |
-| RoBERTa-Base  | 0.973    | 0.966    | 0.0012       | 1.15    | 14.4         | 4,774     |
-| DistilBERT    | 0.970    | 0.962    | 0.0006       | 0.58    | 7.2          | 2,558     |
+| Model           | Accuracy | F1-Score | Energy (kWh) | CO₂ (g) | Latency (ms) | Size (MB) |
+|-----------------|----------|----------|--------------|---------|--------------|-----------|
+| DistilBERT      | 0.9932   | 0.9935   | 0.0031       | 3.14    | 9.6          | 2,558     |
+| ALBERT-Base     | 0.9923   | 0.9926   | 0.0067       | 6.72    | 20.9         | 455       |
+| BERT-Base       | 0.9933   | 0.9935   | 0.0059       | 5.95    | 18.8         | 4,181     |
+| RoBERTa-Base    | 0.9939   | 0.9942   | 0.0056       | 5.58    | 17.4         | 4,774     |
+| ELECTRA-Base    | 0.9938   | 0.9940   | 0.0060       | 6.05    | 18.8         | 4,181     |
+| DeBERTa-v3-Base | 0.9939   | 0.9941   | 0.0079       | 7.92    | 24.9         | 7,078     |
+| ALBERT-Large    | 0.9950   | 0.9952   | 0.0215       | 21.50   | 68.0         | 686       |
+| BERT-Large      | 0.9954   | 0.9956   | 0.0193       | 19.35   | 61.1         | 12,790    |
+| RoBERTa-Large   | 0.9951   | 0.9953   | 0.0183       | 18.31   | 58.1         | 13,570    |
 
-*Results from benchmarking on held-out test set (2,796 samples).*
+*Results from benchmarking on held-out test set (12,375 samples).*
 
 ## 📝 Citation
 

@@ -44,12 +44,6 @@ models:
     output_dir: "models/distilbert"
     max_length: 256
 
-  mobilebert:
-    provider: "huggingface"
-    name: "google/mobilebert-uncased"
-    output_dir: "models/mobilebert"
-    max_length: 256
-
   albert_base:
     provider: "huggingface"
     name: "albert-base-v2"
@@ -81,7 +75,7 @@ models:
     name: "microsoft/deberta-v3-base"
     output_dir: "models/deberta_v3_base"
     max_length: 256
-
+    
   albert_large:
     provider: "huggingface"
     name: "albert-large-v2"

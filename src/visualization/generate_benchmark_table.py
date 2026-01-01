@@ -137,18 +137,18 @@ def format_benchmark_table(
     # ===== SAVE ALL FORMATS =====
     # Save formatted CSV
     csv_path = output_path / "benchmark_table.csv"
-    df_formatted.to_csv(csv_path, index=False)
+    df_formatted.to_csv(csv_path, index=False, encoding='utf-8')
     print(f"✓ Saved benchmark table (CSV): {csv_path}")
     
     # Save Markdown
     md_path = output_path / "benchmark_table.md"
-    with open(md_path, 'w') as f:
+    with open(md_path, 'w', encoding='utf-8') as f:
         f.write(markdown_table)
     print(f"✓ Saved benchmark table (Markdown): {md_path}")
     
     # Save LaTeX
     latex_path = output_path / "benchmark_table.tex"
-    with open(latex_path, 'w') as f:
+    with open(latex_path, 'w', encoding='utf-8') as f:
         f.write(latex_table)
     print(f"✓ Saved benchmark table (LaTeX): {latex_path}")
     
@@ -175,7 +175,7 @@ def generate_supplementary_tables(
     
     # Supplementary Table 1: Full metrics
     full_table_path = output_path / "supplementary_full_metrics.csv"
-    results_df.to_csv(full_table_path, index=False)
+    results_df.to_csv(full_table_path, index=False, encoding='utf-8')
     print(f"✓ Saved supplementary table (full metrics): {full_table_path}")
     
     # Supplementary Table 2: Performance-only
@@ -183,7 +183,7 @@ def generate_supplementary_tables(
     perf_cols = [col for col in perf_cols if col in results_df.columns]
     if len(perf_cols) > 1:
         perf_table_path = output_path / "supplementary_performance.csv"
-        results_df[perf_cols].to_csv(perf_table_path, index=False)
+        results_df[perf_cols].to_csv(perf_table_path, index=False, encoding='utf-8')
         print(f"✓ Saved supplementary table (performance only): {perf_table_path}")
     
     # Supplementary Table 3: Efficiency-only
@@ -191,7 +191,7 @@ def generate_supplementary_tables(
     eff_cols = [col for col in eff_cols if col in results_df.columns]
     if len(eff_cols) > 1:
         eff_table_path = output_path / "supplementary_efficiency.csv"
-        results_df[eff_cols].to_csv(eff_table_path, index=False)
+        results_df[eff_cols].to_csv(eff_table_path, index=False, encoding='utf-8')
         print(f"✓ Saved supplementary table (efficiency only): {eff_table_path}")
 
 

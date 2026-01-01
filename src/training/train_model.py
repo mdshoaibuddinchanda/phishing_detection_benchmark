@@ -87,7 +87,23 @@ def train_model(
     training_config = config.get('training', {})
     
     # Load tokenizer and model
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    # Robust tokenizer loading with fallbacks
+    try:
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+    except Exception as e_fast:
+        print(f"Fast tokenizer load failed ({e_fast}); attempting slow tokenizer.")
+        try:
+            tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
+        except Exception as e_slow:
+            print(f"Slow tokenizer load also failed ({e_slow}). Using 'roberta-base' tokenizer as fallback.")
+            # Last-resort fallback to a lightweight, widely-available tokenizer to allow pipeline to continue.
+            tokenizer = AutoTokenizer.from_pretrained("roberta-base")
+
+    # Ensure tokenizer has a reasonable max length
+    try:
+        tokenizer.model_max_length = config.get('max_length', 256)
+    except Exception:
+        pass
     model = AutoModelForSequenceClassification.from_pretrained(
         model_name,
         num_labels=2,

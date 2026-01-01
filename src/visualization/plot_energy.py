@@ -30,7 +30,12 @@ def plot_energy_comparison(
     models = results_df['model'].tolist()
     energy = results_df['energy_kwh'].tolist()
     
-    bars = ax.bar(models, energy, alpha=0.8, color='#555555')
+    # Distinct colors for each model
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', 
+              '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+    bar_colors = [colors[i % len(colors)] for i in range(len(models))]
+    
+    bars = ax.bar(models, energy, alpha=0.85, color=bar_colors, edgecolor='black', linewidth=0.8)
     
     ax.set_xlabel('Model')
     ax.set_ylabel('Energy Consumption (kWh)')
@@ -71,7 +76,12 @@ def plot_co2_comparison(
     models = results_df['model'].tolist()
     co2 = results_df['co2_grams'].tolist()
     
-    bars = ax.bar(models, co2, alpha=0.8, color='#555555')
+    # Distinct colors for each model
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', 
+              '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+    bar_colors = [colors[i % len(colors)] for i in range(len(models))]
+    
+    bars = ax.bar(models, co2, alpha=0.85, color=bar_colors, edgecolor='black', linewidth=0.8)
     
     ax.set_xlabel('Model')
     ax.set_ylabel('CO₂ Emissions (grams)')
@@ -112,7 +122,12 @@ def plot_latency_comparison(
     models = results_df['model'].tolist()
     latency = results_df['latency_ms_per_sample'].tolist()
     
-    bars = ax.bar(models, latency, alpha=0.8, color='#555555')
+    # Distinct colors for each model
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', 
+              '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+    bar_colors = [colors[i % len(colors)] for i in range(len(models))]
+    
+    bars = ax.bar(models, latency, alpha=0.85, color=bar_colors, edgecolor='black', linewidth=0.8)
     
     ax.set_xlabel('Model')
     ax.set_ylabel('Latency (ms per sample)')
@@ -153,7 +168,12 @@ def plot_model_size_comparison(
     models = results_df['model'].tolist()
     sizes = results_df['model_size_mb'].tolist()
     
-    bars = ax.bar(models, sizes, alpha=0.8, color='#555555')
+    # Distinct colors for each model
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', 
+              '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+    bar_colors = [colors[i % len(colors)] for i in range(len(models))]
+    
+    bars = ax.bar(models, sizes, alpha=0.85, color=bar_colors, edgecolor='black', linewidth=0.8)
     
     ax.set_xlabel('Model')
     ax.set_ylabel('Model Size (MB)')

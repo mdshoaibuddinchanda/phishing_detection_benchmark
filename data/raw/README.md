@@ -11,9 +11,24 @@ The pipeline expects a CSV file with the following columns:
 
 ### 1. Kaggle Phishing Email Dataset
 
+**Recommended Dataset (Used in this project)*
+
 ```bash
-# Download from: https://www.kaggle.com/datasets/subhajournal/phishingemails
+# Download from: https://doi.org/10.34740/kaggle/ds/5074342
+# Or via Kaggle: https://www.kaggle.com/datasets/phishing-email-dataset
 # Place in: data/raw/phishing_emails.csv
+```
+
+**Citation:**
+
+```bibtex
+@misc{phishing_kaggle_5074342,
+  title        = {Phishing Email Dataset},
+  author       = {Kaggle Datasets},
+  year         = {2024},
+  doi          = {10.34740/kaggle/ds/5074342},
+  url          = {https://doi.org/10.34740/kaggle/ds/5074342}
+}
 ```
 
 ### 2. Enron Email Dataset (with phishing labels)
